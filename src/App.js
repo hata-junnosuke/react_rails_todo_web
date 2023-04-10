@@ -1,25 +1,62 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import Task from "./component/Task";
+import { Center, Box, CheckboxGroup, Text } from "@chakra-ui/react";
 
-function App() {
+const App = () => {
+  const initialTasks = [
+    {
+      name: "買い物",
+      isDone: true
+    },
+    {
+      name: "ランニング",
+      isDone: false
+    },
+    {
+      name: "プログラミングの勉強",
+      isDone: false
+    },
+  ];
+
+  const [tasks, setTasks] = useState([initialTasks]);
+
+  useEffect(() => {
+    setTasks(initialTasks);
+  }, []);
+
+  const toggleIsDone = (index) => {
+    const tasksCopy = [...tasks];
+    const isDone = tasksCopy[index].isDone;
+    tasksCopy[index].isDone =!isDone;
+    setTasks(tasksCopy);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box mt="64px">
+      <Center>
+        <Box>
+          <Box mb="24px">
+            <Text fontSize="24px" fontWeight="bold">
+              タスク一覧
+            </Text>
+          </Box>
+          <CheckboxGroup>
+            {tasks.map((task, index) => {
+              return (
+                <Task
+                  key={index}
+                  index={index}
+                  name={task.name}
+                  isDone={task.isDone}
+                  toggleIsDone={toggleIsDone}
+                />
+              )
+            })}
+          </CheckboxGroup>
+        </Box>
+      </Center>
+    </Box>
   );
-}
+};
 
 export default App;
